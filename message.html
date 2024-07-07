@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message spécial pour Deborah</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Roboto:wght@300;400&display=swap');
+        
+        body, html {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Roboto', sans-serif;
+        }
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            z-index: -2;
+        }
+        .bubbles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: rise 10s infinite ease-in;
+        }
+        .bubble:nth-child(even) {
+            background: rgba(255, 192, 203, 0.3);
+        }
+        @keyframes rise {
+            0% {
+                bottom: -100px;
+                transform: translateX(0);
+            }
+            50% {
+                transform: translate(100px, -50vh);
+            }
+            100% {
+                bottom: 100vh;
+                transform: translateX(-200px);
+            }
+        }
+        .message-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 90%;
+            width: 600px;
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: justify;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+        .salutation {
+            font-family: 'Dancing Script', cursive;
+            font-size: 32px;
+            color: #ff4081;
+            text-align: center;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInDown 1s forwards;
+        }
+        .hidden {
+            opacity: 0;
+        }
+        .visible {
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
+        .emoji {
+            font-size: 24px;
+            display: inline-block;
+            animation: bounce 0.6s ease infinite;
+        }
+        .highlight {
+            background: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 0.2em;
+            background-position: 0 88%;
+            transition: background-size 0.25s ease-in;
+        }
+        .highlight:hover {
+            background-size: 100% 88%;
+        }
+        .hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .heart {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ff4081;
+            transform: rotate(45deg);
+            animation: heartFall 3s linear forwards;
+            opacity: 0;
+        }
+        .heart::before,
+        .heart::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: inherit;
+            border-radius: 50%;
+            position: absolute;
+        }
+        .heart::before {
+            top: -5px;
+        }
+        .heart::after {
+            left: -5px;
+        }
+        @keyframes fadeInDown {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        @keyframes heartFall {
+            to {
+                transform: translateY(100vh) rotate(45deg);
+                opacity: 0;
+            }
+        }
+        .replay-button {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 20px;
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .replay-button:hover {
+            background-color: #e91e63;
+        }
+        .fade-out {
+            animation: fadeOut 1s forwards;
+        }
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .message-container {
+                font-size: 14px;
+                padding: 15px;
+            }
+            .salutation {
+                font-size: 28px;
+            }
+            .emoji {
+                font-size: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .message-container {
+                font-size: 12px;
+                padding: 10px;
+            }
+            .salutation {
+                font-size: 24px;
+            }
+            .emoji {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="bubbles" id="bubbles"></div>
+    <div class="hearts" id="hearts"></div>
+    <div class="message-container" id="message-container">
+        <h1 class="salutation">Chère Déborah,</h1>
+        	  <span class="hidden">Je</span>
+        <span class="hidden">me</span>
+        <span class="hidden">demande</span>
+        <span class="hidden">souvent</span>
+        <span class="hidden">comment</span>
+        <span class="hidden">je</span>
+        <span class="hidden">pourrais</span>
+        <span class="hidden">te</span>
+        <span class="hidden">faire</span>
+        <span class="hidden">sourire.</span>
+        <span class="hidden">Je</span>
+        <span class="hidden">suis</span>
+        <span class="hidden">sûr</span>
+        <span class="hidden">que</span>
+        <span class="hidden">ton</span>
+        <span class="hidden">sourire</span>
+        <span class="hidden">est</span>
+        <span class="hidden">magnifique,</span>
+        <span class="hidden">du</span>
+        <span class="hidden">genre</span>
+        <span class="hidden">à</span>
+        <span class="hidden">transformer</span>
+        <span class="hidden">la</span>
+        <span class="hidden">tristesse</span>
+        <span class="hidden">en</span>
+        <span class="hidden">joie</span>
+        <span class="hidden">instantanément.</span>
+        <span class="hidden">J'adore</span>
+        <span class="hidden">discuter</span>
+        <span class="hidden">avec</span>
+        <span class="hidden">toi,</span>
+        <span class="hidden">vraiment</span>
+        <span class="hidden">! <span class="emoji">😸</span></span>
+        <span class="hidden">À</span>
+        <span class="hidden">chaque</span>
+        <span class="hidden">fois</span>
+        <span class="hidden">que</span>
+        <span class="hidden">je</span>
+        <span class="hidden">reçois</span>
+        <span class="hidden">une</span>
+        <span class="hidden">notification,</span>
+        <span class="hidden">j'espère</span>
+        <span class="hidden">toujours</span>
+        <span class="hidden">que</span>
+        <span class="hidden">c'est</span>
+        <span class="hidden">un</span>
+        <span class="hidden">message</span>
+        <span class="hidden">de</span>
+        <span class="hidden">toi.</span>
+        <span class="hidden">D'ailleurs,</span>
+        <span class="hidden">j'ai</span>
+        <span class="hidden">découvert</span>
+        <span class="hidden">que</span>
+        <span class="hidden">ton</span>
+        <span class="hidden">prénom,</span>
+        <span class="hidden">d'origine</span>
+        <span class="hidden">hébraïque,</span>
+        <span class="hidden">signifie</span>
+        <span class="hidden">"abeille"</span>
+         <span class="hidden">Et</span>
+        <span class="hidden">apparemment,</span>
+        <span class="hidden">l'abeille</span>
+        <span class="hidden">symbolise</span>
+        <span class="hidden">la</span>
+        <span class="hidden">femme</span>
+        <span class="hidden">parfaite.</span>
+       	 <span class="hidden">C'est</span>
+        <span class="hidden">incroyable</span>
+        <span class="hidden">à</span>
+        <span class="hidden">quel</span>
+        <span class="hidden">point</span>
+        <span class="hidden">ce</span>
+        <span class="hidden">prénom</span>
+        <span class="hidden">te</span>
+        <span class="hidden">va</span>
+        <span class="hidden">bien,</span>
+        <span class="hidden">car</span>
+        <span class="hidden">tu</span>
+        <span class="hidden">apportes</span>
+        <span class="hidden">de</span>
+        <span class="hidden">la</span>
+        <span class="hidden">douceur</span>
+        <span class="hidden">et</span>
+        <span class="hidden">de</span>
+        <span class="hidden">la</span>
+        <span class="hidden">joie</span>
+        <span class="hidden">comme</span>
+        <span class="hidden">le</span>
+        <span class="hidden">miel. <span class="emoji">🍯</span></span>
+      
+        <span class="hidden">Franchement,</span>
+        <span class="hidden">aide-moi</span>
+        <span class="hidden">à</span>
+        <span class="hidden">te</span>
+        <span class="hidden">connaître</span>
+        <span class="hidden">mieux,</span>
+        <span class="hidden">parce</span>
+        <span class="hidden">que</span>
+        <span class="hidden">là,</span>
+        <span class="hidden">je</span>
+        <span class="hidden">galère</span>
+        <span class="hidden">un</span>
+        <span class="hidden">peu</span>
+        <span class="hidden">à</span>
+        <span class="hidden">trouver</span>
+        <span class="hidden">les</span>
+        <span class="hidden">mots</span>
+        <span class="hidden">pour</span>
+        <span class="hidden">te</span>
+        <span class="hidden">faire</span>
+        <span class="hidden">sourire.</span>
+        <span class="hidden">Mais</span>
+        <span class="hidden">t'inquiète,</span>
+        <span class="hidden">je</span>
+        <span class="hidden">vais</span>
+        <span class="hidden">y</span>
+        <span class="hidden">arriver</span>
+        <span class="hidden">un</span>
+        <span class="hidden">jour,</span>
+        <span class="hidden">promis</span>
+        <span class="hidden">! <span class="emoji">😂👌</span></span>
+
+    </div>
+
+    <script>
+        let messageDisplayed = false;
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const messageContainer = document.getElementById("message-container");
+            const originalContent = messageContainer.innerHTML;
+            
+            function displayMessage() {
+                messageDisplayed = true;
+                const words = document.querySelectorAll(".message-container .hidden");
+                let delay = 1000;
+                words.forEach((word, index) => {
+                    setTimeout(() => {
+                        word.classList.add("visible");
+                        if (index % 10 === 0) {
+                            createHeart();
+                        }
+                    }, delay);
+                    delay += 200;
+                });
+
+                setTimeout(() => {
+                    words.forEach(word => word.classList.add("fade-out"));
+                    setTimeout(() => {
+                        messageContainer.innerHTML = `
+                            <h1 class="salutation">Chère Deborah,</h1>
+                            <p>Je m'ennuyais, t'inquiète !</p>
+                            <p>PS: Tu veux revoir le message ? 😉</p>
+                            <button class="replay-button" id="replay-button">Revoir le message ?</button>
+                        `;
+                        document.getElementById("replay-button").addEventListener("click", replayMessage);
+                    }, 1000);
+                }, delay + 8000);
+            }
+
+            function replayMessage() {
+                messageContainer.innerHTML = originalContent;
+                displayMessage();
+            }
+
+            const highlightWords = ['magnifique', 'sourire', 'joie', 'abeille', 'douceur', 'vie','parfaite'];
+            document.querySelectorAll(".message-container .hidden").forEach(word => {
+                if (highlightWords.some(hw => word.textContent.includes(hw))) {
+                    word.classList.add('highlight');
+                }
+            });
+
+            createBubbles();
+            displayMessage();
+        });
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            document.getElementById('hearts').appendChild(heart);
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        function createBubbles() {
+            const bubblesContainer = document.getElementById('bubbles');
+            for (let i = 0; i < 50; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                bubble.style.left = Math.random() * 100 + 'vw';
+                bubble.style.animationDuration = Math.random() * 5 + 5 + 's';
+                bubble.style.animationDelay = Math.random() * 5 + 's';
+                bubblesContainer.appendChild(bubble);
+            }
+        }
+    </script>
+</body>
+</html>
